@@ -436,6 +436,16 @@ class TransmuxingController {
         info.currentSegmentIndex = this._currentSegmentIndex;
         info.totalSegmentCount = this._mediaDataSource.segments.length;
 
+        let driftRecordString = ''
+        if (this._remuxer) {
+            const driftRecord = this._remuxer.getDriftRecord();
+            if (driftRecord.length) {
+                driftRecordString = driftRecord.join('; ');
+            }
+        }
+
+        info.driftRecord = driftRecordString;
+
         this._emitter.emit(TransmuxingEvents.STATISTICS_INFO, info);
     }
 

@@ -65,6 +65,7 @@ class MP4Remuxer {
         this._mp3UseMpegAudio = !Browser.firefox;
 
         this._fillAudioTimestampGap = this._config.fixAudioTimestampGap;
+        this._driftRecord = [];
     }
 
     destroy() {
@@ -400,6 +401,7 @@ class MP4Remuxer {
                         'Silent frames will be generated to avoid unsync.\n' +
                         `originalDts: ${originalDts} ms, curRefDts: ${curRefDts} ms, ` +
                         `dtsCorrection: ${Math.round(dtsCorrection)} ms, generate: ${frameCount} frames`);
+                    this._driftRecord.push(`${Math.round(dtsCorrection)},${frameCount}`);
 
                     // read: 给外部用
                     dts = Math.floor(curRefDts);
@@ -787,6 +789,12 @@ class MP4Remuxer {
         result.set(moof, 0);
         result.set(mdat, moof.byteLength);
         return result;
+    }
+
+    getDriftRecord() {
+        const record = [...this._driftRecord];
+        this._driftRecord = [];
+        return record;
     }
 
 }

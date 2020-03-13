@@ -100,7 +100,7 @@
                 }
             }
             player = flvjs.createPlayer(mediaDataSource, {
-                enableWorker: false,
+                enableWorker: location.search.indexOf('worker') > -1,
                 lazyLoadMaxDuration: 3 * 60,
                 seekType: 'range',
                 statisticsInfoReportInterval: 4000,
